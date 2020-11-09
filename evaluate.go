@@ -11,7 +11,7 @@ type Scores struct {
 	Score int
 }
 
-func (b Board) calculateScores() Scores {
+func (b Board) calculateScoresDisc() Scores {
 	// this winds up being used for max disc strats
 	blackCount := 0
 	whiteCount := 0
@@ -22,6 +22,24 @@ func (b Board) calculateScores() Scores {
 			blackCount++
 		case c == white:
 			whiteCount++
+		}
+	}
+
+	r := blackCount - whiteCount
+
+	return Scores{Black: blackCount, White: whiteCount, Score: r}
+}
+
+func (b Board) calculateScoresWeight() Scores {
+	blackCount := 0
+	whiteCount := 0
+
+	for i, c := range b.board {
+		switch {
+		case c == black:
+			blackCount += weights[i]
+		case c == white:
+			whiteCount += weights[i]
 		}
 	}
 

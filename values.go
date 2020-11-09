@@ -22,7 +22,7 @@ const (
 	none  int = 0
 
 	// max alphaBeta search depth
-	maxDepth int = 11
+	maxDepth int = 15
 
 	// disc character/rune
 	disc rune = '●'

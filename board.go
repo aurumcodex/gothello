@@ -13,8 +13,8 @@ type Board struct {
 }
 
 func (b Board) setup(c int) {
-	b.bot = b.bot.init(-c, false)
-	b.player = b.player.init(c, true)
+	b.bot = initialize(-c, false)
+	b.player = initialize(c, true)
 
 	b.board[27] = white
 	b.board[28] = black
@@ -59,14 +59,9 @@ Check:
 } // end flipDiscs()
 
 func (b Board) print(moveset []Move) {
-	// TODO: add in param for printing moves
-	// var cells []int
 	cells := getCells(moveset)
-	// for _, m := range moveset {
-	// 	cells = append(cells, m.cell)
-	// }
 
-	fmt.Printf("(@) is bot as %v | (O) is player as %v\n", b.bot.color, b.player.color)
+	fmt.Printf("bot is %v | player is %v\n", b.bot.color, b.player.color)
 
 	fmt.Println("  ._a_b_c_d_e_f_g_h_")
 

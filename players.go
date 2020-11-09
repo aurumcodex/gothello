@@ -3,24 +3,27 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"math/rand"
 	"os"
 	"strings"
 	"time"
 )
 
+// Player is a struct to hold data about a player
 type Player struct {
-	color    int
-	numDiscs int
-	score    int
-	human    bool
-	passing  bool
+	color int
+	// numDiscs int
+	// score    int
+	human   bool
+	passing bool
 }
 
-func (p Player) init(c int, h bool) Player {
+func initialize(c int, h bool) Player {
 	return Player{
-		color: c,
-		human: h,
+		color:   c,
+		human:   h,
+		passing: false,
 	}
 }
 
@@ -146,21 +149,75 @@ func (p Player) handleInputWhite(opponent Player) {
 }
 
 // [===== bot logic section =====]
-func (p Player) makeMoveBot(b Board, random, debug bool) int {
+func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 	// TODO: add logic
-	moveset := b.generateMoves(p.color)
+	// moveset := b.generateMoves(p.color)
 	// cells := getCells(moveset)
 
 	move := -1
-	// depth := 0
-	// maxing := true
-	// alpha := float64(math.MinInt64)
-	// beta := float64(math.MaxInt64)
+	depth := 0
+	maxing := true
+	alpha := float64(math.MinInt64)
+	beta := float64(math.MaxInt64)
+	color := p.color
 
-	if random {
+	moveType := alphabeta
+
+	switch moveType {
+	case rng:
+		fmt.Println("bot is using an rng move")
 		move = p.genRNGMove(moveset, debug)
-	} else {
+	case alphabeta:
+		fmt.Println("bot is using a move generated from alphaBeta")
+		abTable := make(map[int]int)
 
+		for _, m := range moveset {
+			temp := b
+			temp.apply(color, m.cell, debug)
+			temp.flipDiscs(color, -m.direction, m.cell, debug)
+
+			abTemp := temp.alphaBeta(alpha, beta, -color, depth, !maxing, debug)
+
+			fmt.Printf("alphaBeta output at cell %v :: %v\n", m.cell, abTemp)
+			abTable[m.cell] = abTemp
+		}
+
+		fmt.Printf("alphaBeta output: %v", abTable)
+
+		max := 0
+		for i, val := range abTable {
+			if val > max {
+				max = val
+				move = i
+			}
+		}
+	case negamax:
+		fmt.Println("bot is using a move generated from alphaBeta")
+		nmTable := make(map[int]int)
+
+		for _, m := range moveset {
+			temp := b
+			temp.apply(color, m.cell, debug)
+			temp.flipDiscs(color, -m.direction, m.cell, debug)
+
+			nmTemp := temp.negamax(alpha, beta, -color, depth, debug)
+
+			fmt.Printf("negamax output at cell %v :: %v\n", m.cell, nmTemp)
+			nmTable[m.cell] = nmTemp
+		}
+
+		fmt.Printf("alphaBeta output: %v\n", nmTable)
+
+		max := 0
+		for i, val := range nmTable {
+			if val > max {
+				max = val
+				move = i
+			}
+		}
+	default:
+		fmt.Println("(the bot shruged)")
+		move = p.genRNGMove(moveset, debug)
 	}
 
 	return move // for now
@@ -183,13 +240,9 @@ func (p Player) genRNGMove(moveset []Move, debug bool) int {
 	return move
 }
 
-// func genFallbackMove(cells []int) int {
-// 	rand.Seed(time.Now().UnixNano())
-// 	move := rand.Intn(boardSize)
-
-// 	for !sliceContains(move, cells) {
-// 		move = rand.Intn(boardSize)
-// 	}
-
-// 	return move
-// }
+// "enum"s for move decision for bot
+const (
+	rng int = iota
+	alphabeta
+	negamax
+)

@@ -80,20 +80,36 @@ func checkBorderMove(m Move) bool {
 }
 
 func checkDir(index, direction int) bool {
-	switch {
-	case direction == east && contains(index, rightBorder):
-		return true
-	case direction == west && contains(index, leftBorder):
-		return true
-	case direction == northEast && (contains(index, rightBorder) || contains(index, topBorder)):
-		return true
-	case direction == northWest && (contains(index, leftBorder) || contains(index, topBorder)):
-		return true
-	case direction == southEast && (contains(index, rightBorder) || contains(index, bottomBorder)):
-		return true
-	case direction == southWest && (contains(index, leftBorder) || contains(index, bottomBorder)):
-		return true
+	result := false
+
+	switch direction {
+	case east:
+		if contains(index, rightBorder) {
+			result = true
+		}
+	case west:
+		if contains(index, leftBorder) {
+			result = true
+		}
+	case northEast:
+		if contains(index, rightBorder) || contains(index, topBorder) {
+			result = true
+		}
+	case northWest:
+		if contains(index, leftBorder) || contains(index, topBorder) {
+			result = true
+		}
+	case southEast:
+		if contains(index, rightBorder) || contains(index, bottomBorder) {
+			result = true
+		}
+	case southWest:
+		if contains(index, leftBorder) || contains(index, bottomBorder) {
+			result = true
+		}
 	default:
-		return false
+		result = false
 	}
+
+	return result
 }

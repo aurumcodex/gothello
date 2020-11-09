@@ -11,7 +11,7 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 	// get fresh copies of alpha and beta (maybe)
 
 	moveCount := len(b.generateMoves(player))
-	bestMove := -1
+	score := -1
 
 	if debug {
 		fmt.Println("moves available:", moveCount, "| depth =", depth)
@@ -22,15 +22,15 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 			fmt.Println("hit max depth (15)")
 		}
 
-		scores := b.calculateScores()
-		bestMove = scores.Score
+		scores := b.calculateScoresDisc()
+		score = scores.Score
 
 		if debug {
 			b.print(emptyMoves)
 		}
 	} else if depth < maxDepth {
 		if maxing {
-			bestMove = minInt
+			score = minInt
 			moveset := b.generateMoves(player)
 
 		Max:
@@ -45,15 +45,15 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 
 				val := temp.alphaBeta(alpha, beta, -player, depth+1, !maxing, debug)
 
-				bestMove = max(bestMove, val)
-				alpha = math.Max(alpha, float64(bestMove))
+				score = max(score, val)
+				alpha = math.Max(alpha, float64(score))
 
 				if alpha >= beta {
 					break Max
 				}
 			}
 		} else if !maxing {
-			bestMove = maxInt
+			score = maxInt
 			moveset := b.generateMoves(player)
 
 		Min:
@@ -68,8 +68,8 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 
 				val := temp.alphaBeta(alpha, beta, -player, depth+1, !maxing, debug)
 
-				bestMove = min(bestMove, val)
-				beta = math.Min(beta, float64(bestMove))
+				score = min(score, val)
+				beta = math.Min(beta, float64(score))
 
 				if alpha >= beta {
 					break Min
@@ -78,7 +78,7 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 		}
 	}
 
-	return bestMove
+	return score
 } // end alphaBeta()
 
 // Negamax is a fuction
@@ -92,7 +92,7 @@ func (b Board) negamax(alpha, beta float64, player, depth int, debug bool) int {
 	}
 
 	if depth == 0 {
-		return player * b.calculateScores().Score
+		return player * b.calculateScoresDisc().Score
 	}
 
 Cycle:

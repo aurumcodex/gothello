@@ -20,6 +20,58 @@ func getRow(x int) int {
 	return (x / 8) + 1
 }
 
+func getCol(x int) string {
+	r := ""
+
+	switch x % 8 {
+	case 0:
+		r = "a"
+	case 1:
+		r = "b"
+	case 2:
+		r = "c"
+	case 3:
+		r = "d"
+	case 4:
+		r = "e"
+	case 5:
+		r = "f"
+	case 6:
+		r = "g"
+	case 7:
+		r = "h"
+	default:
+		r = "_"
+	}
+
+	return r
+}
+
+func getDir(x int) string {
+	r := ""
+
+	switch x {
+	case north:
+		r = "N"
+	case south:
+		r = "S"
+	case east:
+		r = "E"
+	case west:
+		r = "W"
+	case northEast:
+		r = "NE"
+	case northWest:
+		r = "NW"
+	case southEast:
+		r = "SE"
+	case southWest:
+		r = "SW"
+	}
+
+	return r
+}
+
 func printChar(i int, s string) {
 	if i%8 == 7 {
 		fmt.Printf(" %v\n", s)
