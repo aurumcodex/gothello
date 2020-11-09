@@ -62,7 +62,7 @@ var (
 	emptyMoves = make([]Move, 0)
 
 	// maps for user input
-	rows = map[string]int{
+	columns = map[string]int{
 		"a": 0,
 		"b": 1,
 		"c": 2,
@@ -73,7 +73,7 @@ var (
 		"h": 7,
 	}
 
-	columns = map[string]int{
+	rows = map[string]int{
 		"1": 0,
 		"2": 1,
 		"3": 2,

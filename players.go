@@ -54,11 +54,21 @@ func (p Player) getInput(cells []int, human bool) int {
 
 	chars := strings.Split(input, " ")
 
+	fmt.Printf("%v >> %T, len = %v\n", chars, chars, len(chars))
+
 	// need to figure out if it's possible to simplify this logic even more
-	if (chars[0] == "B" && p.color == black) && !empty(cells) && len(chars) > 1 {
-		row = rows[chars[2]]
-		col = columns[chars[1]]
+	if (chars[0] == "B" || chars[0] == "b" && p.color == black) && !empty(cells) && len(chars) > 1 {
+		fmt.Println()
+		fmt.Println()
+
+		fmt.Printf("map rows at %v: %v\n", chars[2], rows[chars[2]])
+		fmt.Printf("map rows at %v: %v\n", chars[1], columns[chars[1]])
+		// fmt.Println("got valid first char")
+		// fmt.Printf("chars[1] = %v (%T), chars[2] = %v (%T)\n", chars[1], chars[1], chars[2], chars[2])
+		row, _ = rows[chars[2]]
+		col, _ = columns[chars[1]]
 		move = (row * 8) + col
+		fmt.Printf("row : %v | col : %v | move : %v\n", row, col, move)
 
 		if !sliceContains(move, cells) {
 			switch human {
@@ -66,11 +76,11 @@ func (p Player) getInput(cells []int, human bool) int {
 				fmt.Println("since a human is playing, re-enter move")
 				p.getInput(cells, human)
 			case false:
-				fmt.Fprintln(os.Stderr, "invalid move entered")
+				fmt.Fprintln(os.Stderr, "invalid move entered; (bot)")
 				os.Exit(1)
 			}
 		}
-	} else if (chars[0] == "W" && p.color == white) && !empty(cells) && len(chars) > 1 {
+	} else if (chars[0] == "W" || chars[0] == "w" && p.color == white) && !empty(cells) && len(chars) > 1 {
 		row = rows[chars[2]]
 		col = columns[chars[1]]
 		move = (row * 8) + col
@@ -81,7 +91,7 @@ func (p Player) getInput(cells []int, human bool) int {
 				fmt.Println("since a human is playing, re-enter move")
 				p.getInput(cells, human)
 			case false:
-				fmt.Fprintln(os.Stderr, "invalid move entered")
+				fmt.Fprintln(os.Stderr, "invalid move entered; (bot)")
 				os.Exit(1)
 			}
 		}
@@ -95,7 +105,7 @@ func (p Player) getInput(cells []int, human bool) int {
 	return move
 }
 
-func (p Player) getPassInput(opponent Player) {
+func (p *Player) getPassInput(opponent Player) {
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
@@ -122,7 +132,7 @@ func (p Player) getPassInput(opponent Player) {
 	}
 }
 
-func (p Player) handleInputBlack(opponent Player) {
+func (p *Player) handleInputBlack(opponent Player) {
 	if p.color != black && p.human {
 		fmt.Println("you have no valid moves and need to pass. re-enter input")
 		p.getPassInput(opponent)
@@ -135,7 +145,7 @@ func (p Player) handleInputBlack(opponent Player) {
 	}
 }
 
-func (p Player) handleInputWhite(opponent Player) {
+func (p *Player) handleInputWhite(opponent Player) {
 	if p.color != white && p.human {
 		fmt.Println("you have no valid moves and need to pass. re-enter input")
 		p.getPassInput(opponent)
@@ -182,7 +192,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 			abTable[m.cell] = abTemp
 		}
 
-		fmt.Printf("alphaBeta output: %v", abTable)
+		fmt.Printf("alphaBeta output: %v\n", abTable)
 
 		max := 0
 		for i, val := range abTable {
@@ -206,7 +216,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 			nmTable[m.cell] = nmTemp
 		}
 
-		fmt.Printf("alphaBeta output: %v\n", nmTable)
+		fmt.Printf("negamax output: %v\n", nmTable)
 
 		max := 0
 		for i, val := range nmTable {

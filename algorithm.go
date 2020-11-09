@@ -7,7 +7,7 @@ import (
 
 //implement search algorithms here
 
-func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, maxing, debug bool) int {
+func (b *Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, maxing, debug bool) int {
 	// get fresh copies of alpha and beta (maybe)
 
 	moveCount := len(b.generateMoves(player))
@@ -82,7 +82,7 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 } // end alphaBeta()
 
 // Negamax is a fuction
-func (b Board) negamax(alpha, beta float64, player, depth int, debug bool) int {
+func (b *Board) negamax(alpha, beta float64, player, depth int, debug bool) int {
 	moveset := b.generateMoves(player)
 	moveCount := len(moveset)
 	bestMove := minInt

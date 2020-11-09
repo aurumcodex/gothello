@@ -9,8 +9,13 @@ import (
 
 func main() {
 	// need to get and parse cli arguments
+	// tempPlayer := initialize(black, true)
+	// fmt.Println(tempPlayer)
+	// tempBot := initialize(white, false)
+	// fmt.Println(tempBot)
+
 	const human = true
-	const debug = true
+	const debug = false
 
 	turnCount := 0
 	game := Board{}
@@ -29,11 +34,11 @@ GetInput:
 		switch input {
 		case "b", "B", "Black", "black", "BLACK":
 			fmt.Println("player will be set up as black")
-			game.setup(black)
+			game = game.setup(black)
 			break GetInput
 		case "w", "W", "White", "white", "WHITE":
 			fmt.Println("player will be set up as white")
-			game.setup(white)
+			game = game.setup(white)
 			break GetInput
 		default:
 			fmt.Println("unable to get acceptable input; please re-enter")
@@ -42,13 +47,13 @@ GetInput:
 	}
 
 	currentPlayer := game.player.color
-	fmt.Println(game)
-	fmt.Println("color: ", color(currentPlayer, true))
-	os.Exit(0)
+	// fmt.Println(game)
+	// fmt.Println("color:", color(currentPlayer, true))
+	// os.Exit(0)
 
 	for !game.gameOver {
-		movelist := make([]Move, 0)
-		cells := make([]int, 0)
+		movelist := []Move{}
+		cells := []int{}
 
 		fmt.Printf("turn count :: %v\n", turnCount)
 
@@ -57,11 +62,13 @@ GetInput:
 			cells = nil
 			movelist = game.generateMoves(game.player.color)
 
+			game.print(movelist)
+
 			fmt.Println("legal moves:")
 			for _, m := range movelist {
 				fmt.Printf("%v %v %v | ", color(game.player.color, false), getCol(m.cell), getRow(m.cell))
 				fmt.Printf("num filps: %v | ", m.numFlips)
-				fmt.Printf("direction: %v\n", getDir(m.direction))
+				fmt.Printf("direction: %v\n", getDir(-m.direction))
 				cells = append(cells, m.cell)
 			}
 
@@ -70,6 +77,7 @@ GetInput:
 				game.player.getPassInput(game.bot)
 			} else {
 				m := game.player.getInput(cells, human)
+				fmt.Printf("player made move at: %v\n", m)
 				game.apply(game.player.color, m, debug)
 
 				for _, mv := range movelist {
@@ -83,11 +91,13 @@ GetInput:
 			cells = nil
 			movelist = game.generateMoves(game.bot.color)
 
+			game.print(movelist)
+
 			fmt.Println("legal moves:")
 			for _, m := range movelist {
 				fmt.Printf("%v %v %v | ", color(game.bot.color, false), getCol(m.cell), getRow(m.cell))
 				fmt.Printf("num filps: %v | ", m.numFlips)
-				fmt.Printf("direction: %v\n", getDir(m.direction))
+				fmt.Printf("direction: %v\n", getDir(-m.direction))
 				cells = append(cells, m.cell)
 			}
 

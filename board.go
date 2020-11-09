@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // Board ...
 type Board struct {
@@ -12,17 +10,22 @@ type Board struct {
 	gameOver bool
 }
 
-func (b Board) setup(c int) {
+func (b Board) setup(c int) Board {
 	b.bot = initialize(-c, false)
+	fmt.Println(b.bot)
 	b.player = initialize(c, true)
+	fmt.Println(b.player)
 
 	b.board[27] = white
 	b.board[28] = black
 	b.board[35] = black
 	b.board[36] = white
+	fmt.Println(b.board)
+
+	return b
 }
 
-func (b Board) apply(color, cell int, debug bool) {
+func (b *Board) apply(color, cell int, debug bool) {
 	if b.board[cell] == none {
 		if debug {
 			fmt.Println("Applying move at cell", cell)
@@ -37,7 +40,7 @@ func (b Board) apply(color, cell int, debug bool) {
 	}
 } // end apply()
 
-func (b Board) flipDiscs(color, dir, cell int, debug bool) {
+func (b *Board) flipDiscs(color, dir, cell int, debug bool) {
 	tempCell := cell
 
 Check:
