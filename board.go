@@ -25,7 +25,7 @@ func (b Board) setup(c int) Board {
 	return b
 }
 
-func (b *Board) apply(color, cell int, debug bool) {
+func (b Board) apply(color, cell int, debug bool) Board {
 	if b.board[cell] == none {
 		if debug {
 			fmt.Println("Applying move at cell", cell)
@@ -38,9 +38,11 @@ func (b *Board) apply(color, cell int, debug bool) {
 			fmt.Println("Cell is now:", b.board[cell])
 		}
 	}
+
+	return b
 } // end apply()
 
-func (b *Board) flipDiscs(color, dir, cell int, debug bool) {
+func (b Board) flipDiscs(color, dir, cell int, debug bool) Board {
 	tempCell := cell
 
 Check:
@@ -59,6 +61,8 @@ Check:
 			}
 		}
 	}
+
+	return b
 } // end flipDiscs()
 
 func (b Board) print(moveset []Move) {

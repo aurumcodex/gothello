@@ -78,11 +78,11 @@ GetInput:
 			} else {
 				m := game.player.getInput(cells, human)
 				fmt.Printf("player made move at: %v\n", m)
-				game.apply(game.player.color, m, debug)
+				game = game.apply(game.player.color, m, debug)
 
 				for _, mv := range movelist {
 					if mv.cell == m {
-						game.flipDiscs(game.player.color, -mv.direction, mv.cell, debug)
+						game = game.flipDiscs(game.player.color, -mv.direction, mv.cell, debug)
 					}
 				}
 			}
@@ -116,11 +116,11 @@ GetInput:
 				}
 
 				fmt.Printf("bot generated move : %v %v %v\n", color(game.bot.color, false), getCol(m), getRow(m))
-				game.apply(game.bot.color, m, debug)
+				game = game.apply(game.bot.color, m, debug)
 
 				for _, mv := range movelist {
 					if mv.cell == m {
-						game.flipDiscs(game.bot.color, -mv.direction, mv.cell, debug)
+						game = game.flipDiscs(game.bot.color, -mv.direction, mv.cell, debug)
 					}
 				}
 			}

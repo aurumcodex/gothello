@@ -7,7 +7,7 @@ import (
 
 //implement search algorithms here
 
-func (b *Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, maxing, debug bool) int {
+func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, maxing, debug bool) int {
 	// get fresh copies of alpha and beta (maybe)
 
 	moveCount := len(b.generateMoves(player))
@@ -40,8 +40,8 @@ func (b *Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, 
 				}
 
 				temp := b
-				temp.apply(player, m.cell, debug)
-				temp.flipDiscs(player, -1*m.direction, m.cell, debug)
+				temp = temp.apply(player, m.cell, debug)
+				temp = temp.flipDiscs(player, -1*m.direction, m.cell, debug)
 
 				val := temp.alphaBeta(alpha, beta, -player, depth+1, !maxing, debug)
 
@@ -82,7 +82,7 @@ func (b *Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, 
 } // end alphaBeta()
 
 // Negamax is a fuction
-func (b *Board) negamax(alpha, beta float64, player, depth int, debug bool) int {
+func (b Board) negamax(alpha, beta float64, player, depth int, debug bool) int {
 	moveset := b.generateMoves(player)
 	moveCount := len(moveset)
 	bestMove := minInt
@@ -102,8 +102,8 @@ Cycle:
 		}
 
 		temp := b
-		temp.apply(player, m.cell, debug)
-		temp.flipDiscs(player, -1*m.direction, m.cell, debug)
+		temp = temp.apply(player, m.cell, debug)
+		temp = temp.flipDiscs(player, -1*m.direction, m.cell, debug)
 
 		bestMove = max(bestMove, -temp.negamax(-beta, -alpha, -player, depth-1, debug))
 		alpha = math.Max(alpha, float64(bestMove))
