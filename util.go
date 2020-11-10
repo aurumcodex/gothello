@@ -145,3 +145,13 @@ func sliceContains(i int, list []int) bool {
 	}
 	return false
 }
+
+func sliceContainsDebug(i int, list []int) bool {
+	for n, j := range list {
+		fmt.Printf("%v: %v\n", n, j)
+		if j == i {
+			return true
+		}
+	}
+	return false
+}

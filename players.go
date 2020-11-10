@@ -177,6 +177,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 	case rng:
 		fmt.Println("bot is using an rng move")
 		move = p.genRNGMove(moveset, debug)
+
 	case alphabeta:
 		fmt.Println("bot is using a move generated from alphaBeta")
 		abTable := make(map[int]int)
@@ -196,12 +197,15 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 
 		max := 0
 		for i, val := range abTable {
+			move = i
 			fmt.Printf("i: %v | val: %v\n", i, val)
 			if val > max {
 				max = val
 				move = i
 			}
 		}
+		return move
+
 	case negamax:
 		fmt.Println("bot is using a move generated from alphaBeta")
 		nmTable := make(map[int]int)
@@ -227,6 +231,8 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 				move = i
 			}
 		}
+		return move
+
 	default:
 		fmt.Println("(the bot shruged)")
 		move = p.genRNGMove(moveset, debug)

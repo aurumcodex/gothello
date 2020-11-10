@@ -14,9 +14,9 @@ func (b Board) alphaBeta(alpha, beta *float64, player, depth /*turnCount*/ int, 
 	moveCount := len(b.generateMoves(player))
 	score := -1
 
-	// if debug {
-	fmt.Println("moves available:", moveCount, "| depth =", depth)
-	// }
+	if debug {
+		fmt.Println("moves available:", moveCount, "| depth =", depth)
+	}
 
 	if depth == maxDepth {
 		if debug {
