@@ -115,14 +115,14 @@ func printWhite(i int) {
 
 // [===== general purpose functions =====]
 func max(i, j int) int {
-	if i > j {
+	if j > i {
 		return i
 	}
 	return j
 }
 
 func min(i, j int) int {
-	if i < j {
+	if j < i {
 		return i
 	}
 	return j

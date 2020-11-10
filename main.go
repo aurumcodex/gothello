@@ -115,7 +115,7 @@ GetInput:
 					m = game.bot.genRNGMove(movelist, debug)
 				}
 
-				fmt.Printf("bot generated move : %v %v %v\n", color(game.bot.color, false), getCol(m), getRow(m))
+				fmt.Printf("bot generated move : %v %v %v (%v)\n", color(game.bot.color, false), getCol(m), getRow(m), m)
 				game = game.apply(game.bot.color, m, debug)
 
 				for _, mv := range movelist {

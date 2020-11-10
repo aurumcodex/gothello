@@ -7,23 +7,25 @@ import (
 
 //implement search algorithms here
 
-func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, maxing, debug bool) int {
+func (b Board) alphaBeta(alpha, beta *float64, player, depth /*turnCount*/ int, maxing, debug bool) int {
 	// get fresh copies of alpha and beta (maybe)
+	fmt.Printf("alpha is: %v | beta is: %v\n", *alpha, *beta)
 
 	moveCount := len(b.generateMoves(player))
 	score := -1
 
-	if debug {
-		fmt.Println("moves available:", moveCount, "| depth =", depth)
-	}
+	// if debug {
+	fmt.Println("moves available:", moveCount, "| depth =", depth)
+	// }
 
 	if depth == maxDepth {
 		if debug {
 			fmt.Println("hit max depth (15)")
 		}
 
-		scores := b.calculateScoresDisc()
-		score = scores.Score
+		// scores := b.calculateScoresDisc()
+		score = b.calculateScoresDisc().Score
+		fmt.Printf("score is: %v\n", score)
 
 		if debug {
 			b.print(emptyMoves)
@@ -45,10 +47,10 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 
 				val := temp.alphaBeta(alpha, beta, -player, depth+1, !maxing, debug)
 
-				score = max(score, val)
-				alpha = math.Max(alpha, float64(score))
+				score = int(math.Max(float64(score), float64(val)))
+				*alpha = math.Max(*alpha, float64(score))
 
-				if alpha >= beta {
+				if *alpha >= *beta {
 					break Max
 				}
 			}
@@ -68,10 +70,10 @@ func (b Board) alphaBeta(alpha, beta float64, player, depth /*turnCount*/ int, m
 
 				val := temp.alphaBeta(alpha, beta, -player, depth+1, !maxing, debug)
 
-				score = min(score, val)
-				beta = math.Min(beta, float64(score))
+				score = int(math.Min(float64(score), float64(val)))
+				*beta = math.Min(*beta, float64(score))
 
-				if alpha >= beta {
+				if *alpha >= *beta {
 					break Min
 				}
 			}

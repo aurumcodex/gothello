@@ -186,7 +186,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 			temp.apply(color, m.cell, debug)
 			temp.flipDiscs(color, -m.direction, m.cell, debug)
 
-			abTemp := temp.alphaBeta(alpha, beta, -color, depth, !maxing, debug)
+			abTemp := temp.alphaBeta(&alpha, &beta, -color, depth, !maxing, debug)
 
 			fmt.Printf("alphaBeta output at cell %v :: %v\n", m.cell, abTemp)
 			abTable[m.cell] = abTemp
@@ -196,6 +196,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 
 		max := 0
 		for i, val := range abTable {
+			fmt.Printf("i: %v | val: %v\n", i, val)
 			if val > max {
 				max = val
 				move = i
@@ -220,6 +221,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 
 		max := 0
 		for i, val := range nmTable {
+			fmt.Printf("i: %v | val: %v\n", i, val)
 			if val > max {
 				max = val
 				move = i
