@@ -215,7 +215,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 			temp.apply(color, m.cell, debug)
 			temp.flipDiscs(color, -m.direction, m.cell, debug)
 
-			nmTemp := temp.negamax(alpha, beta, -color, depth, debug)
+			nmTemp := temp.negamax(&alpha, &beta, -color, depth, debug)
 
 			fmt.Printf("negamax output at cell %v :: %v\n", m.cell, nmTemp)
 			nmTable[m.cell] = nmTemp

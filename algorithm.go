@@ -87,10 +87,13 @@ func (b Board) alphaBeta(alpha, beta *float64, player, depth /*turnCount*/ int, 
 } // end alphaBeta()
 
 // Negamax is a fuction
-func (b Board) negamax(alpha, beta float64, player, depth int, debug bool) int {
+func (b Board) negamax(alpha, beta *float64, player, depth int, debug bool) int {
 	moveset := b.generateMoves(player)
 	moveCount := len(moveset)
 	bestMove := minInt
+
+	a := *alpha * -1
+	bt := *beta * -1
 
 	if debug {
 		fmt.Println("moves available:", moveCount, "| depth =", depth)
@@ -110,10 +113,10 @@ Cycle:
 		temp = temp.apply(player, m.cell, debug)
 		temp = temp.flipDiscs(player, -1*m.direction, m.cell, debug)
 
-		bestMove = max(bestMove, -temp.negamax(-beta, -alpha, -player, depth-1, debug))
-		alpha = math.Max(alpha, float64(bestMove))
+		bestMove = max(bestMove, -temp.negamax(&bt, &a, -player, depth-1, debug))
+		*alpha = math.Max(*alpha, float64(bestMove))
 
-		if alpha >= beta {
+		if *alpha >= *beta {
 			break Cycle
 		}
 	}
