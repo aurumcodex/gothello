@@ -9,6 +9,7 @@ import (
 
 func (b Board) alphaBeta(alpha, beta *float64, player, depth /*turnCount*/ int, maxing, debug bool) int {
 	// get fresh copies of alpha and beta (maybe)
+	// need to possibly re-write this algorithm
 	fmt.Printf("alpha is: %v | beta is: %v\n", *alpha, *beta)
 
 	moveCount := len(b.generateMoves(player))
@@ -69,11 +70,13 @@ func (b Board) alphaBeta(alpha, beta *float64, player, depth /*turnCount*/ int, 
 				temp.flipDiscs(player, -1*m.direction, m.cell, debug)
 
 				val := temp.alphaBeta(alpha, beta, -player, depth+1, !maxing, debug)
+				fmt.Printf("val is = %v\n", val)
 
 				score = int(math.Min(float64(score), float64(val)))
 				*beta = math.Min(*beta, float64(score))
 
-				if *alpha >= *beta {
+				if *beta <= *alpha {
+					fmt.Printf("breaking in min loop | alpha = %v | beta = %v | depth = %v\n", *alpha, *beta, depth)
 					break Min
 				}
 			}

@@ -171,7 +171,7 @@ func (p Player) makeMoveBot(b Board, moveset []Move, debug bool) int {
 	beta := float64(math.MaxInt64)
 	color := p.color
 
-	moveType := alphabeta
+	moveType := negamax
 
 	switch moveType {
 	case rng:
