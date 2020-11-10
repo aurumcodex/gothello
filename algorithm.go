@@ -97,7 +97,7 @@ func (b Board) negamax(alpha, beta float64, player, depth int, debug bool) int {
 	}
 
 	if depth == 0 {
-		return player * b.calculateScoresDisc().Score
+		return player * b.calculateScoresWeight().Score
 	}
 
 Cycle:
